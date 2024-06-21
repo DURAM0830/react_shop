@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function App() {
   
-  let [shose] = useState(data);
+  let [shose,setShose] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -36,9 +36,9 @@ function App() {
           <div className='container'>
             <div className='row'>
               {
-                data.map(function(a, i){
+                shose.map(function(a, i){
                   return (
-                    <상품카드 title={a.title} price={a.price} image={a.image} id={a.id}/>
+                    <상품카드 title={a.title} price={a.price} id={a.id}/>
                   )
                 })
               }
@@ -46,9 +46,10 @@ function App() {
           </div>
           <button onClick={()=>{
             axios.get('https://codingapple1.github.io/shop/data2.json').then((result)=>{
-              console.log(result.data);
+              let copy = [...shose, ...result.data]
+              setShose(copy);
             })
-          }}>버튼</button>
+          }}>더보기</button>
           </>
         }/>
         <Route path='/detail/:id' element={<DetailPage shose={shose}/>}/>
@@ -64,7 +65,7 @@ function 상품카드(props){
 
   return (
     <div className='col-md-4' onClick={()=>{navigate("/detail/"+props.id)}}>
-      <img src={props.image} width='80%'/>
+      <img src={"https://codingapple1.github.io/shop/shoes" + (props.id + 1) + ".jpg"} width='80%'/>
       <h4>{props.title}</h4>
       <p>{props.price}</p>
     </div>
